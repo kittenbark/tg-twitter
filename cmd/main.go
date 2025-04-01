@@ -28,6 +28,7 @@ func main() {
 				}
 			}
 
+			slog.Info("downloading", "from", msg.Chat.Username, "twitter", msg.Text, "vx", url)
 			files, dir, post, err := vx.DownloadTempVx(url)
 			defer func(dir string) {
 				if err := os.RemoveAll(dir); err != nil {
