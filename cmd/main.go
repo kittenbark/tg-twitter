@@ -18,7 +18,7 @@ func main() {
 		Scheduler().
 		OnError(tg.OnErrorLog).
 		Command("/start", tg.CommonReactionReply("💅")).
-		Branch(tg.OnUrl, func(ctx context.Context, upd *tg.Update) error {
+		Branch(tg.OnUrl, tg.Chain(tg.CommonReactionReply("👀"), tg.Synced(func(ctx context.Context, upd *tg.Update) error {
 			msg := upd.Message
 			reply := &tg.ReplyParameters{MessageId: msg.MessageId}
 			url, err := vxtwitter.Vx(msg.Text)
@@ -49,6 +49,6 @@ func main() {
 				}
 			}
 			return nil
-		}).
+		}))).
 		Start()
 }
