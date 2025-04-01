@@ -1,0 +1,26 @@
+services:
+  tw_tg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION_GOLANG: "1.24"
+        VERSION_ALPINE: "3.21"
+    environment:
+      - KITTENBARK_TG_TOKEN
+      - KITTENBARK_TG_TEST_API_URL
+    container_name: tw_tg
+    network_mode: host
+    env_file:
+      - .env
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 128M

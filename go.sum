@@ -1,0 +1,6 @@
+github.com/cavaliergopher/grab/v3 v3.0.1 h1:4z7TkBfmPjmLAAmkkAZNX/6QJ1nNFdv3SdIHXju0Fr4=
+github.com/cavaliergopher/grab/v3 v3.0.1/go.mod h1:1U/KNnD+Ft6JJiYoYBAimKH2XrYptb8Kl3DFGmsjpq4=
+github.com/kittenbark/tg v0.0.0-20250330131524-8abbed58dc04 h1:lJCF1+97kwJyJbcP1tuhUyI0+wrjzi3F/8KxhWL5tqA=
+github.com/kittenbark/tg v0.0.0-20250330131524-8abbed58dc04/go.mod h1:n84Rl0h0IaG+pLij7L9PSwErJCbG755uoqf3pLhw4BY=
+github.com/kittenbark/tgmedia v0.0.0-20250322070646-441716fb1605 h1:NSnzfKRZnbIArYysJVhr2111lhKvWdMWWvqzm+YNwGY=
+github.com/kittenbark/tgmedia v0.0.0-20250322070646-441716fb1605/go.mod h1:u2GOCKnmSMh4EpCiVuVRZ0BSZ1H+erfpJDYlWJ5UwD8=
