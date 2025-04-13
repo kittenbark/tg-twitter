@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -37,14 +38,23 @@ func main() {
 			}(dir)
 
 			for _, file := range files {
-				filename := fmt.Sprintf("@%s_%s", post.UserScreenName, path.Base(file))
+				filename := path.Join(dir, fmt.Sprintf(
+					"%s_%s_%s",
+					strings.ToLower(post.UserScreenName),
+					time.Unix(post.DateEpoch, 0).Format("2006-01-02"),
+					path.Base(file),
+				))
+				if err := os.Rename(file, filename); err != nil {
+					slog.Error("failed to move file", "err", err)
+					continue
+				}
 				switch path.Ext(strings.ToLower(filename)) {
 				case ".mp4", ".mpeg", ".mov":
-					if _, err := tgvideo.Send(ctx, msg.Chat.Id, file, &tg.OptSendVideo{ReplyParameters: reply}); err != nil {
+					if _, err := tgvideo.Send(ctx, msg.Chat.Id, filename, &tg.OptSendVideo{ReplyParameters: reply}); err != nil {
 						return err
 					}
 				default:
-					if _, err := tg.SendDocument(ctx, msg.Chat.Id, tg.FromDisk(file), &tg.OptSendDocument{ReplyParameters: reply}); err != nil {
+					if _, err := tg.SendDocument(ctx, msg.Chat.Id, tg.FromDisk(filename), &tg.OptSendDocument{ReplyParameters: reply}); err != nil {
 						return err
 					}
 				}

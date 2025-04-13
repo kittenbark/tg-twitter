@@ -113,10 +113,10 @@ func Vx(url string) (string, error) {
 
 type VxMedia struct {
 	AltText        string `json:"altText"`
-	DurationMillis int    `json:"duration_millis,omitempty"`
+	DurationMillis int64  `json:"duration_millis,omitempty"`
 	Size           struct {
-		Height int `json:"height"`
-		Width  int `json:"width"`
+		Height int64 `json:"height"`
+		Width  int64 `json:"width"`
 	} `json:"size"`
 	ThumbnailUrl string `json:"thumbnail_url"`
 	Type         string `json:"type"`
@@ -125,13 +125,13 @@ type VxMedia struct {
 
 type VxPost struct {
 	Date           string    `json:"date"`
-	DateEpoch      int       `json:"date_epoch"`
+	DateEpoch      int64     `json:"date_epoch"`
 	Hashtags       []string  `json:"hashtags"`
-	Likes          int       `json:"likes"`
+	Likes          int64     `json:"likes"`
 	MediaURLs      []string  `json:"mediaURLs"`
 	MediaExtended  []VxMedia `json:"media_extended"`
-	Replies        int       `json:"replies"`
-	Retweets       int       `json:"retweets"`
+	Replies        int64     `json:"replies"`
+	Retweets       int64     `json:"retweets"`
 	Text           string    `json:"text"`
 	TweetID        string    `json:"tweetID"`
 	TweetURL       string    `json:"tweetURL"`
