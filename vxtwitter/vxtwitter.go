@@ -88,9 +88,11 @@ func (api *API) DownloadTempVx(url string) (files []string, dir string, post *Vx
 		if err != nil {
 			return ret, dir, post, fmt.Errorf("api.download.grab.newrequest for '%s': %v", mediaURL, err)
 		}
-		if err := client.Do(req).Err(); err != nil {
+		resp = client.Do(req)
+		if err := resp.Err(); err != nil {
 			return ret, dir, post, fmt.Errorf("api.download.grab.dorequest for '%s': %v", mediaURL, err)
 		}
+		ret = append(ret, resp.Filename)
 	}
 
 	return ret, dir, post, nil
