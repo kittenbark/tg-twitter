@@ -36,6 +36,9 @@ func main() {
 					slog.Error("failed to remove temporary files", "err", err)
 				}
 			}(dir)
+			if err != nil {
+				slog.Error("failed to download", "err", err)
+			}
 
 			for _, file := range files {
 				filename := path.Join(dir, fmt.Sprintf(
