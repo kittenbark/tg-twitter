@@ -1,6 +1,7 @@
 package vxtwitter
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/cavaliergopher/grab/v3"
@@ -38,8 +39,14 @@ func (api *API) Get(url string) (*VxPost, error) {
 	}
 	defer resp.Body.Close()
 
+	buff := bytes.Buffer{}
+	if _, err = buff.ReadFrom(resp.Body); err != nil {
+		return nil, fmt.Errorf("http.get '%s': %v", url, err)
+	}
+	println(buff.String())
+
 	var post VxPost
-	if err := json.NewDecoder(resp.Body).Decode(&post); err != nil {
+	if err := json.NewDecoder(&buff).Decode(&post); err != nil {
 		return nil, fmt.Errorf("json.decode '%s': %v", url, err)
 	}
 
@@ -69,10 +76,21 @@ func (api *API) DownloadTempVx(url string) (files []string, dir string, post *Vx
 		}
 
 		resp := client.Do(req)
-		if err := resp.Err(); err != nil {
+		if err := resp.Err(); err != nil && resp.HTTPResponse.StatusCode != 404 {
+			return ret, dir, post, fmt.Errorf("api.download.grab.dorequest for '%s': %v", mediaURL, err)
+		} else if err == nil {
+			ret = append(ret, resp.Filename)
+			continue
+		}
+
+		mediaURL = strings.TrimSuffix(mediaURL, "?name=large")
+		req, err = grab.NewRequest(dir, mediaURL)
+		if err != nil {
+			return ret, dir, post, fmt.Errorf("api.download.grab.newrequest for '%s': %v", mediaURL, err)
+		}
+		if err := client.Do(req).Err(); err != nil {
 			return ret, dir, post, fmt.Errorf("api.download.grab.dorequest for '%s': %v", mediaURL, err)
 		}
-		ret = append(ret, resp.Filename)
 	}
 
 	return ret, dir, post, nil
