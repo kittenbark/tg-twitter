@@ -100,7 +100,6 @@ func sendPhotoAsDocumentWithUploadButton(
 				&tg.CallbackButton{
 					Text: fmt.Sprintf("upload pic #%d", onUrlPicId.Add(1)),
 					Handler: func(ctx context.Context, upd *tg.Update) error {
-						slog.Info(fmt.Sprintf("upload pic #%d", onUrlPicId.Add(1)))
 						album := tg.Album{}
 						for _, fileid := range picturesFileIds {
 							file, err := tg.GetFile(ctx, fileid)
