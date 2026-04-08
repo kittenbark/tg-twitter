@@ -2,5 +2,11 @@ github.com/cavaliergopher/grab/v3 v3.0.1 h1:4z7TkBfmPjmLAAmkkAZNX/6QJ1nNFdv3SdIH
 github.com/cavaliergopher/grab/v3 v3.0.1/go.mod h1:1U/KNnD+Ft6JJiYoYBAimKH2XrYptb8Kl3DFGmsjpq4=
 github.com/kittenbark/tg v0.0.0-20250330131524-8abbed58dc04 h1:lJCF1+97kwJyJbcP1tuhUyI0+wrjzi3F/8KxhWL5tqA=
 github.com/kittenbark/tg v0.0.0-20250330131524-8abbed58dc04/go.mod h1:n84Rl0h0IaG+pLij7L9PSwErJCbG755uoqf3pLhw4BY=
+github.com/kittenbark/tg v0.0.0-20260309104355-a8bebe17a935 h1:ANHggrnYFpQO/N6Rp+C1S5BLLRitdiN9WjD7jTIdAw4=
+github.com/kittenbark/tg v0.0.0-20260309104355-a8bebe17a935/go.mod h1:n84Rl0h0IaG+pLij7L9PSwErJCbG755uoqf3pLhw4BY=
+github.com/kittenbark/tg v0.0.0-20260407115354-0f73bf406dbb h1:SOmdhXIBRwig0MmHlA8yBQzOuItIezxHsKDekOaa6NU=
+github.com/kittenbark/tg v0.0.0-20260407115354-0f73bf406dbb/go.mod h1:n84Rl0h0IaG+pLij7L9PSwErJCbG755uoqf3pLhw4BY=
+github.com/kittenbark/tg v0.0.0-20260408072626-f66d40bfb9b8 h1:7+6hj75LIXF7XTM29n5BC84+o1H+8bSfnOqnkedvtrY=
+github.com/kittenbark/tg v0.0.0-20260408072626-f66d40bfb9b8/go.mod h1:n84Rl0h0IaG+pLij7L9PSwErJCbG755uoqf3pLhw4BY=
 github.com/kittenbark/tgmedia v0.0.0-20250322070646-441716fb1605 h1:NSnzfKRZnbIArYysJVhr2111lhKvWdMWWvqzm+YNwGY=
 github.com/kittenbark/tgmedia v0.0.0-20250322070646-441716fb1605/go.mod h1:u2GOCKnmSMh4EpCiVuVRZ0BSZ1H+erfpJDYlWJ5UwD8=

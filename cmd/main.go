@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -40,7 +41,8 @@ func main() {
 				slog.Error("failed to download", "err", err)
 			}
 
-			for _, file := range files {
+			pictures := make([]string, 0, len(files))
+			for i, file := range files {
 				filename := path.Join(dir, fmt.Sprintf(
 					"%s_%s_%s",
 					strings.ToLower(post.UserScreenName),
@@ -56,6 +58,18 @@ func main() {
 					if _, err := tgvideo.Send(ctx, msg.Chat.Id, filename, &tg.OptSendVideo{ReplyParameters: reply}); err != nil {
 						return err
 					}
+				case ".png", ".jpg", ".jpeg":
+					if i+1 == len(files) {
+						if err := sendPhotoAsDocumentWithUploadButton(ctx, msg, filename, reply, pictures); err != nil {
+							return err
+						}
+						break
+					}
+					sent, err := tg.SendDocument(ctx, msg.Chat.Id, tg.FromDisk(filename), &tg.OptSendDocument{ReplyParameters: reply})
+					if err != nil {
+						return err
+					}
+					pictures = append(pictures, sent.Document.FileId)
 				default:
 					if _, err := tg.SendDocument(ctx, msg.Chat.Id, tg.FromDisk(filename), &tg.OptSendDocument{ReplyParameters: reply}); err != nil {
 						return err
@@ -65,4 +79,58 @@ func main() {
 			return nil
 		}))).
 		Start()
+}
+
+var onUrlPicId = &atomic.Int64{}
+
+func sendPhotoAsDocumentWithUploadButton(
+	ctx context.Context,
+	msg *tg.Message,
+	filename string,
+	reply *tg.ReplyParameters,
+	picturesFileIds []string,
+) error {
+	sent, err := tg.SendDocument(
+		ctx,
+		msg.Chat.Id,
+		tg.FromDisk(filename),
+		&tg.OptSendDocument{
+			ReplyParameters: reply,
+			ReplyMarkup: (&tg.Keyboard{Layout: [][]tg.ButtonI{{
+				&tg.CallbackButton{
+					Text: fmt.Sprintf("upload pic #%d", onUrlPicId.Add(1)),
+					Handler: func(ctx context.Context, upd *tg.Update) error {
+						slog.Info(fmt.Sprintf("upload pic #%d", onUrlPicId.Add(1)))
+						album := tg.Album{}
+						for _, fileid := range picturesFileIds {
+							file, err := tg.GetFile(ctx, fileid)
+							if err != nil {
+								return err
+							}
+							local, err := file.DownloadTemp(ctx)
+							if err != nil {
+								return err
+							}
+							defer func() { _ = os.Remove(local) }()
+							album = append(album, &tg.Photo{Media: tg.FromDisk(local)})
+						}
+
+						if _, err := tg.SendMediaGroup(ctx, msg.Chat.Id, album, &tg.OptSendMediaGroup{ReplyParameters: reply}); err != nil {
+							return err
+						}
+						return nil
+					},
+					OnComplete: &tg.OptAnswerCallbackQuery{
+						Text:      "🍓",
+						CacheTime: 30,
+					},
+				},
+			}}}).BuildRegister(ctx),
+		},
+	)
+	if err != nil {
+		return err
+	}
+	picturesFileIds = append(picturesFileIds, sent.Document.FileId)
+	return nil
 }
